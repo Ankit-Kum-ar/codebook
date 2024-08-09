@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductCard from '../../components/Elements/ProductCard'
 import FilterBar from './components/FilterBar'
 
 const ProductsList = () => {
   const [show,setShow] = useState(false);
+  const [products, setProducts] = useState([]);
+  const fetchProducts = async() => {
+    const response = await fetch('http://localhost:8000/products');
+    const data = await response.json();
+    console.log(data);
+    setProducts(data);
+  }
+  useEffect(() => {
+    fetchProducts();
+  }, [])
   return (
     <main>
       <section>
@@ -19,12 +29,11 @@ const ProductsList = () => {
 
         {/* Code for the product Cards that show row-wise using <ProductCard/>*/}
         <div className="flex flex-wrap justify-center lg:flex-row">
-          <ProductCard/>
-          <ProductCard/>
-          <ProductCard/>
-          <ProductCard/>
-          <ProductCard/>
-          <ProductCard/>
+          {
+            products.map((product) => (
+              <ProductCard key={product.id} product={product}/>
+            ))
+          } 
         </div>
 
         {
