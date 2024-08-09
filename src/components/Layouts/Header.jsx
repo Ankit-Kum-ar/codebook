@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom"
 import logo from "../../assets/logo.png"
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const Header = () => {
-  const [isDarkMode, setDarkMode] = useState(false);
+  const [isDarkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem("isDarkMode")) || false);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!isDarkMode);
-  };
+  useEffect(() => {
+    localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
+
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    
+  }, [isDarkMode])
   return (
     <header>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -18,7 +25,7 @@ const Header = () => {
               </Link>
               <div className="flex items-center md:space-x-6 space-x-4 rtl:space-x-reverse">
                   <span className="cursor-pointer text-xl font-semibold dark:text-white">
-                    <DarkModeSwitch checked={isDarkMode} onChange={toggleDarkMode}/>
+                    <DarkModeSwitch checked={isDarkMode} onChange={() => setDarkMode(!isDarkMode)}/>
                   </span>
                   <span className="cursor-pointer text-xl font-semibold dark:text-white bi bi-search"></span>
                   <Link to="/cart" className="text-gray-700 dark:text-white mr-5">
