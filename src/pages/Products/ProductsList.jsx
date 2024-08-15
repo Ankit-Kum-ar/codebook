@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import ProductCard from '../../components/Elements/ProductCard'
 import FilterBar from './components/FilterBar'
+import { useLocation } from 'react-router-dom';
 
 const ProductsList = () => {
   const [show,setShow] = useState(false);
   const [products, setProducts] = useState([]);
+
+  // useLocation hook to get the search params
+  const search = useLocation().search;
+  console.log(search); // ?q=react
+
+  // To retrive only react from ?q=react, use URLSearchParams
+  const params = new URLSearchParams(search).get('q');
+  console.log(params); // react
+
   const fetchProducts = async() => {
-    const response = await fetch('http://localhost:8000/products');
+    const response = await fetch(`http://localhost:8000/products?name_like=${params ? params : ""}`);
     const data = await response.json();
     console.log(data);
     setProducts(data);
