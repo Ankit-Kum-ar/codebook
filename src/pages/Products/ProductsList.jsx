@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ProductCard from '../../components/Elements/ProductCard'
 import FilterBar from './components/FilterBar'
 import { useLocation } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
 
 const ProductsList = () => {
   const [show,setShow] = useState(false);
@@ -14,6 +15,9 @@ const ProductsList = () => {
   // To retrive only react from ?q=react, use URLSearchParams
   const params = new URLSearchParams(search).get('q');
   console.log(params); // react
+
+  // Changing title of page using useTitle custom hook...
+  useTitle("Explore eBooks Collection");
 
   const fetchProducts = async() => {
     const response = await fetch(`http://localhost:8000/products?name_like=${params ? params : ""}`);
